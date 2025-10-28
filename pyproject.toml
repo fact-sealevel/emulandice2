@@ -8,6 +8,7 @@ authors = [
 ]
 requires-python = ">=3.13"
 dependencies = [
+    "click>=8.3.0",
     "dask[array]>=2025.10.0",
     "netcdf4>=1.7.3",
     "numpy>=2.3.4",
@@ -17,7 +18,7 @@ dependencies = [
 ]
 
 [project.scripts]
-emulandice2 = "emulandice2:main"
+emulandice2 = "emulandice2:cli.main"
 
 [build-system]
 requires = ["uv_build>=0.9.5,<0.10.0"]
