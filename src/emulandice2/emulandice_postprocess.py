@@ -5,8 +5,8 @@ import pickle
 import time
 import argparse
 import re
-from read_locationfile import ReadLocationFile
-from AssignFP import AssignFP
+from emulandice2.read_locationfile import ReadLocationFile
+from emulandice2.AssignFP import AssignFP
 import yaml
 
 import xarray as xr

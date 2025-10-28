@@ -1,0 +1,24 @@
+[project]
+name = "emulandice2"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Brewster Malevich", email = "bmalevich@rhg.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "dask[array]>=2025.10.0",
+    "netcdf4>=1.7.3",
+    "numpy>=2.3.4",
+    "pyyaml>=6.0.3",
+    "scipy>=1.16.3",
+    "xarray[accel,parallel]>=2025.10.1",
+]
+
+[project.scripts]
+emulandice2 = "emulandice2:main"
+
+[build-system]
+requires = ["uv_build>=0.9.5,<0.10.0"]
+build-backend = "uv_build"
