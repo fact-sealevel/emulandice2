@@ -7,7 +7,6 @@ import enum
 import click
 
 from emulandice2.emulandice_project import emulandice_project
-from emulandice2.emulandice_postprocess import emulandice_postprocess
 
 
 class IceSource(enum.Enum):
@@ -134,33 +133,6 @@ class Region(enum.Enum):
     default=False,
     type=bool,
 )
-@click.option(
-    "--location-file",
-    envvar="EMULANDICE2_LOCATION_FILE",
-    help="File containing name, id, lat, and lon of points for localization.",
-    type=str,
-    required=True,
-)
-@click.option(
-    "--chunksize",
-    envvar="EMULANDICE2_CHUNKSIZE",
-    help="Number of locations to process at a time.",
-    default=50,
-)
-@click.option(
-    "--grdfingerprintfile",
-    help="YAML file that contains the fingerprints for each region",
-    envvar="EMULANDICE2_GRDFINGERPRINTFILE",
-    required=True,
-    type=str,
-)
-@click.option(
-    "--nc-file",
-    help="List of NetCDF files",
-    envvar="EMULANDICE2_NC_FILES",
-    multiple=True,
-    required=True,
-)
 def main(
     pipeline_id,
     ice_source,
@@ -176,10 +148,6 @@ def main(
     cyear_start,
     cyear_end,
     no_rebase,
-    location_file,
-    chunksize,
-    grdfingerprintfile,
-    nc_file,
 ) -> None:
     """
     Application projecting sea-level change from ice following the Gaussian process emulators
@@ -203,13 +171,4 @@ def main(
         cyear_start,
         cyear_end,
         doRebaseSamples=do_rebase,
-    )
-    emulandice_postprocess(
-        location_file,
-        chunksize,
-        pipeline_id,
-        nc_file,
-        grdfingerprintfile,
-        scenario,
-        baseyear,
     )
