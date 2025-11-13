@@ -3,10 +3,15 @@ Logic for the CLI.
 """
 
 import enum
+import logging
 
 import click
 
 from emulandice2.emulandice_project import emulandice_project
+
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 
 class IceSource(enum.Enum):
@@ -133,6 +138,7 @@ class Region(enum.Enum):
     default=False,
     type=bool,
 )
+@click.option("--debug/--no-debug", default=False, envvar="EMULANDICE2_DEBUG")
 def main(
     pipeline_id,
     ice_source,
@@ -148,11 +154,17 @@ def main(
     cyear_start,
     cyear_end,
     no_rebase,
+    debug,
 ) -> None:
     """
     Application projecting sea-level change from ice following the Gaussian process emulators
     """
-    click.echo("Hello from emulandice2!")
+    if debug:
+        logging.root.setLevel(logging.DEBUG)
+    else:
+        logging.root.setLevel(logging.INFO)
+
+    logger.info("Starting emulandice2")
 
     do_rebase = not no_rebase
 
@@ -172,3 +184,5 @@ def main(
         cyear_end,
         doRebaseSamples=do_rebase,
     )
+
+    logger.info("emulandice2 complete")

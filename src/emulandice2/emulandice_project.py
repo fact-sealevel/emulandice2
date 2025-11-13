@@ -6,6 +6,9 @@ import time
 import xarray as xr
 import numpy as np
 import dask
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def emulandice_project(
@@ -157,6 +160,8 @@ def RebaseSamples(ncfile, targyears, baseyear, cyear_start, cyear_end):
 def emulandice_steer(
     ice_source, region, emu_file, climate_data_file, scenario, outdir, seed, pipeline_id
 ):
+    logger.debug("Launching R emulandice2 subprocess")
+
     arguments = [
         ice_source,
         region,
@@ -169,6 +174,8 @@ def emulandice_steer(
     ]
     subprocess.run(["bash", "emulandice_steer.sh", *arguments])
     outfile = pipeline_id + "_" + region + "_globalsl.nc"
+
+    logger.debug("R emulandice2 subprocess complete")
     return outfile
 
 
