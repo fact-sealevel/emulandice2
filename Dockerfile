@@ -35,4 +35,8 @@ ENV PATH="${APP_HOME}/.venv/bin:$PATH"
 # So CLI app knows where to find the magic R script to run emulandice2
 ENV EMULANDICE2_R_SCRIPT_PATH="${APP_HOME}/scripts/main.R"
 
+# Keep Python from buffering output to stdout, stderror.
+# Prevents mangling or out of order write with R subprocess print messages.
+ENV PYTHONUNBUFFERED=1
+
 ENTRYPOINT ["emulandice2"]
