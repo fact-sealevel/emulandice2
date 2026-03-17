@@ -21,7 +21,7 @@ Now run the container, for example with Docker, like
 ```shell
 docker run --rm \
   -v ./data:/data \
-  ghcr.io/fact-sealevel/emulandice:latest \
+  ghcr.io/fact-sealevel/emulandice2:latest \
   --pipeline-id=1234 \
   --ice-source=GIS \
   --emu-file="/data/input/emu_file/GIS_ALL_CISM_pow_exp_01_EMULATOR.RData" \
@@ -29,7 +29,7 @@ docker run --rm \
   --climate-data-file="/data/input/emulandice2.ssp585.GrIS2300.temperature.fair.temperature_climate.nc" \
   --pyear-start=2020 \
   --pyear-end=2300 \
-  --debug --output-gslr-file="/data/output/gslr.nc"
+  --output-gslr-file="/data/output/gslr.nc"
 ```
 
 If the run is successful, the output projection will appear in `./data/output`.
