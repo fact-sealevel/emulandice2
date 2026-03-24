@@ -1,5 +1,5 @@
+import logging
 import numpy as np
-import os
 import time
 import argparse
 from emulandice2.read_locationfile import ReadLocationFile
@@ -66,26 +66,35 @@ a pickle file, and the approach is more generic (such that the same
 script can be used for any source region).
 """
 
+logger = logging.getLogger(__name__)
+
 
 def emulandice_postprocess(
-    locationfilename,
+    locationfile,
     chunksize,
     pipeline_id,
     ncfiles,
     grdfingerprintfile,
+    fingerprint_dir,
     scenario,
     baseyear,
+    output_lslr_file,
 ):
+    logger.debug(f"Reading projection data files from R {ncfiles}")
     matching_ncfiles_dict, grdfingerprint_dict = process_ncfiles_and_grdfingerprintfile(
         ncfiles, grdfingerprintfile
     )
 
     # Load the site locations
-    locationfile = os.path.join(os.path.dirname(__file__), locationfilename)
     (_, site_ids, site_lats, site_lons) = ReadLocationFile(locationfile)
 
     rsl_dict, targyears = scale_ncfiles_by_fingerprint(
-        matching_ncfiles_dict, grdfingerprint_dict, site_lats, site_lons, chunksize
+        matching_ncfiles_dict,
+        grdfingerprint_dict,
+        site_lats,
+        site_lons,
+        chunksize,
+        fingerprint_dir=fingerprint_dir,
     )
 
     # loop over scaled_ncfiles_dict. For each ice source that has
@@ -98,11 +107,11 @@ def emulandice_postprocess(
                 site_ids,
                 site_lats,
                 site_lons,
-                pipeline_id,
                 scenario,
                 baseyear,
                 ice_source,
                 targyears,
+                output_path=output_lslr_file,
             )
     return None
 
@@ -164,7 +173,12 @@ and values that are summed arrays of scaled netcdf files. Return this dictionary
 
 
 def scale_ncfiles_by_fingerprint(
-    matching_ncfiles_dict, grdfingerprint_dict, site_lats, site_lons, chunksize
+    matching_ncfiles_dict,
+    grdfingerprint_dict,
+    site_lats,
+    site_lons,
+    chunksize,
+    fingerprint_dir,
 ):
     # Initialize the	 dictionary to store the scaled and summed netcdf files
     scaled_ncfiles_dict = {}
@@ -181,7 +195,11 @@ def scale_ncfiles_by_fingerprint(
             if region in matching_ncfiles_dict and matching_ncfiles_dict[region]:
                 # Load the fingerprint for that region
                 regionfp = da.array(
-                    AssignFP(regionvars["fingerprint"], site_lats, site_lons)
+                    AssignFP(
+                        regionvars["fingerprint"].replace("FPRINT", fingerprint_dir),
+                        site_lats,
+                        site_lons,
+                    )
                 )
                 regionfp = regionfp.rechunk(chunksize)
 
@@ -223,11 +241,11 @@ def write_localized_projections(
     site_ids,
     site_lats,
     site_lons,
-    pipeline_id,
     scenario,
     baseyear,
     ice_source,
     targyears,
+    output_path,
 ):
     # Define the missing value for the netCDF files
     nc_missing_value = np.nan  # np.iinfo(np.int16).min
@@ -262,7 +280,7 @@ def write_localized_projections(
     )
 
     rsl_out.to_netcdf(
-        "{0}_localsl.nc".format(pipeline_id),
+        output_path,
         encoding={
             "sea_level_change": {
                 "dtype": "f4",

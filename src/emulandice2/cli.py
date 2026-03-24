@@ -2,6 +2,8 @@
 Logic for the CLI.
 """
 
+from emulandice2.emulandice_postprocess import emulandice_postprocess
+
 import enum
 import logging
 
@@ -94,6 +96,13 @@ class Region(enum.StrEnum):
     type=str,
 )
 @click.option(
+    "--output-lslr-file",
+    envvar="EMULANDICE2_OUTPUT_LSLR_FILE",
+    help="Path to write output local SLR file.",
+    required=True,
+    type=str,
+)
+@click.option(
     "--seed",
     help="Seed for random number generator",
     envvar="EMULANDICE2_SEED",
@@ -129,6 +138,33 @@ class Region(enum.StrEnum):
     envvar="EMULANDICE2_BASE_YEAR",
 )
 @click.option(
+    "--chunksize",
+    envvar="EMULANDICE2_CHUNKSIZE",
+    help="Number of locations to process at a time [default=50].",
+    default=50,
+)
+@click.option(
+    "--location-file",
+    envvar="EMULANDICE2_LOCATION_FILE",
+    help="File containing name, id, lat, and lon of points for localization.",
+    type=str,
+    required=True,
+)
+@click.option(
+    "--grdfingerprintfile",
+    envvar="EMULANDICE2_GRDFINGERPRINTFILE",
+    help="YAML file that contains the fingerprints for each region.",
+    type=str,
+    required=True,
+)
+@click.option(
+    "--fingerprint-dir",
+    envvar="EMULANDICE2_FINGERPRINT_DIR",
+    help="Path to directory containing fprint files.",
+    type=str,
+    required=True,
+)
+@click.option(
     "--cyear-start",
     help="Constant rate calculation for projections starts at this year",
     envvar="EMULANDICE2_CYEAR_START",
@@ -162,8 +198,13 @@ def main(
     emu_file,
     climate_data_file,
     output_gslr_file,
+    output_lslr_file,
     scenario,
     baseyear,
+    chunksize,
+    location_file,
+    grdfingerprintfile,
+    fingerprint_dir,
     seed,
     pyear_start,
     pyear_end,
@@ -191,7 +232,7 @@ def main(
         emulandice2_r_output_dir = tmpdir / "results"
         emulandice2_r_output_dir.mkdir(parents=True, exist_ok=True)
 
-        _ = emulandice_project(
+        r_projected_paths = emulandice_project(
             pipeline_id,
             ice_source,
             region,
@@ -209,6 +250,20 @@ def main(
             cyear_end,
             doRebaseSamples=do_rebase,
             r_script_path=r_script_path,
+        )
+
+        # Takes R output files as input so need to run postprocessing before tmp
+        # working dir gets cleaned up.
+        emulandice_postprocess(
+            locationfile=location_file,
+            chunksize=chunksize,
+            pipeline_id=pipeline_id,
+            ncfiles=r_projected_paths,
+            grdfingerprintfile=grdfingerprintfile,
+            fingerprint_dir=fingerprint_dir,
+            scenario=scenario,
+            baseyear=baseyear,
+            output_lslr_file=output_lslr_file,
         )
 
     logger.info("emulandice2 complete")
