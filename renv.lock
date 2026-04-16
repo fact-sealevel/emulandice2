@@ -325,29 +325,10 @@
     "emulandice2": {
       "Package": "emulandice2",
       "Version": "2.0.0",
-      "Source": "GitHub",
-      "Type": "Package",
-      "Title": "Emulandice: emulation of multi-model estimates of the land ice contribution to sea level rise",
-      "Authors@R": "person(\"Tamsin\", \"Edwards\", email = \"tamsin.edwards@kcl.ac.uk\", role = c(\"aut\", \"cre\"))",
-      "Maintainer": "Tamsin L. Edwards <tamsin.edwards@kcl.ac.uk>",
-      "Description": "This code is used to emulate projections of the ice sheet and glacier contributions to sea level rise to 2300.",
-      "License": "MIT",
-      "Encoding": "UTF-8",
-      "LazyData": "true",
-      "Imports": [
-        "methods",
-        "mvtnorm",
-        "RobustGaSP",
-        "ncdf4"
-      ],
-      "RoxygenNote": "7.2.3",
-      "Author": "Tamsin Edwards [aut, cre]",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteUsername": "tamsinedwards",
-      "RemoteRepo": "emulandice2",
-      "RemoteRef": "fd3190469636e14bf7e6c0d1ac18a14a052fd634",
-      "RemoteSha": "fd3190469636e14bf7e6c0d1ac18a14a052fd634"
+      "Source": "git",
+      "RemoteType": "git",
+      "RemoteUrl": "https://github.com/tamsinedwards/emulandice2",
+      "RemoteRef": "eda4f27ef6f5741505503e6874708cbdb39d7568"
     },
     "foreign": {
       "Package": "foreign",
