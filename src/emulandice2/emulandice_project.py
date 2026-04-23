@@ -83,7 +83,7 @@ def emulandice_project(
     logger.debug(f"R-output files are {run_regions}")
     outfile = Path(run_regions[0])
     if len(regions) > 1:
-        outfile = Path(output_dir) / pipeline_id + "_ALL_globalsl.nc"
+        outfile = Path(output_dir) / (pipeline_id + "_ALL_globalsl.nc")
         # does all-region outfile already exist? if not, produce it
         if not os.path.exists(outfile):
             TotalSamples(run_regions, outfile, 50, ice_source)
