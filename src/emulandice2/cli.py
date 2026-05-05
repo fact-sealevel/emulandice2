@@ -26,6 +26,7 @@ class IceSource(enum.StrEnum):
 
 class Region(enum.StrEnum):
     ALL = enum.auto()
+    # GLA
     RGI01 = enum.auto()
     RGI02 = enum.auto()
     RGI03 = enum.auto()
@@ -45,6 +46,10 @@ class Region(enum.StrEnum):
     RGI17 = enum.auto()
     RGI18 = enum.auto()
     RGI19 = enum.auto()
+    # AIS
+    EAIS = enum.auto()
+    PEN = enum.auto()
+    WAIS = enum.auto()
 
 
 @click.command(context_settings={"show_default": True})
