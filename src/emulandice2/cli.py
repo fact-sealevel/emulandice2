@@ -46,7 +46,6 @@ class Region(enum.StrEnum):
     RGI17 = enum.auto()
     RGI18 = enum.auto()
     RGI19 = enum.auto()
-    # GrIS
     # AIS
     EAIS = enum.auto()
     PEN = enum.auto()
