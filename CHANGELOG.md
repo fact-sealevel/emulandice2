@@ -7,4 +7,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-- Initial release.
+### Changed
+- Updated the version renv.lock file to use new version of emulandice2 R pkg that should write correct outputs for single region for AIS ice source. ([PR #16](https://github.com/fact-sealevel/emulandice2/pull/16), [e-marshall](https://github.com/e-marshall))
