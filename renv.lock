@@ -328,7 +328,7 @@
       "Source": "git",
       "RemoteType": "git",
       "RemoteUrl": "https://github.com/tamsinedwards/emulandice2",
-      "RemoteRef": "eda4f27ef6f5741505503e6874708cbdb39d7568"
+      "RemoteRef": "f60915a9a51ad7e97876aa190499bc9cb1439493"
     },
     "foreign": {
       "Package": "foreign",
