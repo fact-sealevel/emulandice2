@@ -188,13 +188,6 @@ class Region(enum.StrEnum):
     default=False,
     type=bool,
 )
-@click.option(
-    "--r-script-path",
-    help="Path to R script to launch emulandice2",
-    type=str,
-    required=True,
-    envvar="EMULANDICE2_R_SCRIPT_PATH",
-)
 @click.option("--debug/--no-debug", default=False, envvar="EMULANDICE2_DEBUG")
 def main(
     pipeline_id,
@@ -217,7 +210,6 @@ def main(
     cyear_start,
     cyear_end,
     no_rebase,
-    r_script_path,
     debug,
 ) -> None:
     """
@@ -254,7 +246,6 @@ def main(
             cyear_start,
             cyear_end,
             doRebaseSamples=do_rebase,
-            r_script_path=r_script_path,
         )
 
         if output_lslr_file is not None:

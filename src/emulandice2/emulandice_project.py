@@ -29,7 +29,6 @@ def emulandice_project(
     pyear_step,
     cyear_start,
     cyear_end,
-    r_script_path,
     doRebaseSamples=True,
 ):
     # Run the module using the FACTS forcing data
@@ -50,7 +49,6 @@ def emulandice_project(
                         output_dir,
                         seed,
                         pipeline_id,
-                        r_script_path,
                     ),
                     targyears,
                     baseyear,
@@ -72,7 +70,6 @@ def emulandice_project(
                     output_dir,
                     seed,
                     pipeline_id,
-                    r_script_path,
                 )
             )
             for ii in np.arange(len(regions))
@@ -180,7 +177,6 @@ def emulandice_steer(
     outdir,
     seed,
     pipeline_id,
-    r_script_path,
 ):
     outdir = str(outdir) + "/"  # R emulandice2 needs this to end with '/'
     ice_source = str(ice_source.upper())
@@ -195,7 +191,15 @@ def emulandice_steer(
         str(seed),
         pipeline_id,
     ]
-    rscript_cmd = ["Rscript", r_script_path, *arguments]
+
+    # Run bash command to run R command to find the path to main.R script in the
+    # emulandice2 R package, then execute main.R with select arguments.
+    rscript_cmd = [
+        "bash",
+        "-c",
+        """Rscript $(Rscript -e 'cat(system.file("main.R",package = "emulandice2"))')""",
+        *arguments,
+    ]
 
     logger.debug(f"Launching R emulandice2 subprocess {rscript_cmd=}")
     subprocess.run(rscript_cmd, shell=False, check=True)
